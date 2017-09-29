@@ -6,7 +6,7 @@
      _|_|  _|    _|  _|  _|  _|  
  _|_|_|      _|_|_|  _|  _|  _|  
                  _|              
-                 _| petergraims
+                 _| petergrimes
 
 Match a regex against a sqlite3 database content
 
@@ -28,8 +28,8 @@ Arguments:
    <regex>       regex to match
 
 """
-__version__ = "0.1.0"
-__author__ = "petergraims"
+__version__ = "1.0.0"
+__author__ = "petergrimes"
 
 from docopt import docopt
 import logging
@@ -127,7 +127,7 @@ def match_regex_in_table(cursor, table_name, table_info, regex, print_out=True):
 
     return match_list
 
-def tableToFile(rowlist, filename, tableName, header):
+def toCSVFile(rowlist, filename, tableName, header):
     with open(filename,'a') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(header)
@@ -160,7 +160,7 @@ def main(cliargs=None):
         for table in tables:
             tables[table] = sqliteutil.table_col_info(c, table)
             if args['-t'] and args['-o']:
-                tableToFile(tables[table], args['<filename>'] + '_tables.csv', table, ["TABLE", "ID", "Name", "Type", "NotNull", "DefaultVal", "PrimaryKey"])
+                toCSVFile(tables[table], args['-o'] + '_tables.csv', table, ["TABLE", "ID", "Name", "Type", "NotNull", "DefaultVal", "PrimaryKey"])
             if args['-t']:
                 toStdOut(tables[table], table, "TABLE, ID, Name, Type, NotNull, DefaultVal, PrimaryKey")
 
@@ -169,7 +169,7 @@ def main(cliargs=None):
             if current_match:
                 toStdOut(current_match, table, "TABLE, COLUMN, RAW MATCH, QUERY")
                 if args['-o']:
-                    tableToFile(current_match, args['<filename>'] + '_matches.csv', table, ["TABLE", "COLUMN", "RAW" "MATCH", "QUERY"])
+                    toCSVFile(current_match, args['-o'] + '_matches.csv', table, ["TABLE", "COLUMN", "RAW" "MATCH", "QUERY"])
             matches[table] = current_match
 
 

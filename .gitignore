@@ -105,6 +105,6 @@ venv.bak/
 
 # custom relates
 # possible dirt
-.sqlite
-.db
-.csv
+*.sqlite
+*.db
+*.csv
