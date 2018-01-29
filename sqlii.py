@@ -15,13 +15,13 @@ inspired by
 
 Usage:
    {proc} [-h | --help]
-   {proc} [-v] [-t] [-o <filename>] <database> <regex>
+   {proc} [-v] [-t] [-o <format>] <database> <regex>
 
 Options:
    -h, --help    Shows this help
    -v            Raise verbosity level
    -t            Show tables info
-   -o <filename> Save to file prefixed filename (csv)
+   -o format     Save to export.format (csv, yaml, txt, json)
 
 Arguments:
    <database>    sqlite3 database you wish to analyze
@@ -39,6 +39,7 @@ import re
 import sys
 import database_inspection_util as diu
 from docopt import docopt
+import tablib
 
 #: The dictionary, used by :class:`logging.config.dictConfig`
 #: use it to setup your logging formatters, handlers, and loggers
@@ -100,7 +101,8 @@ def match_regex_in_table(database, table_name, table_info, regex, print_out=True
     """ Returns a dictionary with columns as keys and the
         match as associated values
     """
-    match_list = []
+    match_list = tablib.Dataset(
+        headers=['TABLE', 'COLUMN', 'RAWMATCH', 'QUERY'])
     regex = re.compile(regex)
 
     rows = database.query("SELECT * FROM %s" % table_name)
@@ -125,19 +127,9 @@ def match_regex_in_table(database, table_name, table_info, regex, print_out=True
 
             for match in matches:
                 query = "SELECT * FROM %s WHERE %s = %s" % (table_name, current_pk_name, current_pk_value)
-                match_list.append(
-                    (column_name, row[idx], query))
+                match_list.append((table_name, column_name, row[idx], query))
 
     return match_list
-
-def toCSVFile(rowlist, filename, tableName, header):
-    with open(filename,'a') as out:
-        csv_out=csv.writer(out)
-        csv_out.writerow(header)
-        for row in rowlist:
-            currentrow = list(row)
-            current = [tableName] + currentrow
-            csv_out.writerow(current)
 
 def toStdOut(rowlist, tableName, header):
     print(header)
@@ -165,8 +157,6 @@ def main(cliargs=None):
         matches = {}
         for table in tables:
             tables[table] = diu.table_col_info(database, table)
-            if args['-t'] and args['-o']:
-                toCSVFile(tables[table], args['-o'] + '_tables.csv', table, ["TABLE", "Name", "Type", "NotNull", "DefaultVal", "PrimaryKey"])
             if args['-t']:
                 toStdOut(tables[table], table, "TABLE, Name, Type, NotNull, DefaultVal, PrimaryKey")
 
@@ -174,9 +164,14 @@ def main(cliargs=None):
                 database, table, tables[table], args['<regex>'])
 
             if current_match:
-                toStdOut(current_match, table, "TABLE, COLUMN, RAW MATCH, QUERY")
+                print(current_match)
                 if args['-o']:
-                    toCSVFile(current_match, args['-o'] + '_matches.csv', table, ["TABLE", "COLUMN", "RAW" "MATCH", "QUERY"])
+                    with open('export.%s' % (args['-o']), 'wa') as f:
+                        if args['-o'] == 'txt':
+                            f.write(str(current_match))
+                        else:
+                            f.write(current_match.export(args['-o']))
+
             matches[table] = current_match
 
         diu.close(database)

@@ -1,6 +1,6 @@
 # sqlii 
 
-Match a regex against a sqlite3 database content.
+Match a regex against a SQL database content.
 
 This script is inspired by
 * http://www.automatingosint.com/blog/2016/05/expanding-skype-forensics-with-osint-email-accounts/
