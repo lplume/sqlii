@@ -16,14 +16,14 @@ Simply clone `sqlii`:
 From the `-h` help menu:
 
 	Usage:
-	{proc} [-h | --help]
-	{proc} [-v] [-t] [-o <format>] <database> <regex>
+		sqlii.py [-h | --help]
+		sqlii.py [-v] [-t] [-o <format>] <database> <regex>
 
 	Options:
-	-h, --help    Shows this help
-	-v            Raise verbosity level
-	-t            Show tables info
-	-o format     Save to export.format (csv, yaml, txt, json)
+		-h, --help    Shows this help
+		-v            Raise verbosity level
+		-t            Show tables info
+		-o format     Save to export.format (csv, yaml, txt, json)
 
 	Arguments:
 	<database>    database dns
