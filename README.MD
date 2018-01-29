@@ -16,18 +16,18 @@ Simply clone `sqlii`:
 From the `-h` help menu:
 
 	Usage:
-	   sqlii.py [-h | --help]
-	   sqlii.py [-v] [-t] [-o <filename>] <database> <regex>
+	{proc} [-h | --help]
+	{proc} [-v] [-t] [-o <format>] <database> <regex>
 
 	Options:
-	   -h, --help    Shows this help
-	   -v            Raise verbosity level
-	   -t            Show tables info
-	   -o <filename> Save to file prefixed filename (csv)
+	-h, --help    Shows this help
+	-v            Raise verbosity level
+	-t            Show tables info
+	-o format     Save to export.format (csv, yaml, txt, json)
 
 	Arguments:
-	   <database>    sqlite3 database you wish to analyze
-	   <regex>       regex to match
+	<database>    database dns
+	<regex>       regex to match
 
 ## License
 

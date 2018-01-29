@@ -8,7 +8,7 @@
                  _|              
                  _| petergrimes
 
-Match a regex against a sqlite3 database content
+Match a regex against a sql database content
 
 inspired by
 * http://www.automatingosint.com/blog/2016/05/expanding-skype-forensics-with-osint-email-accounts/
@@ -24,7 +24,7 @@ Options:
    -o format     Save to export.format (csv, yaml, txt, json)
 
 Arguments:
-   <database>    sqlite3 database you wish to analyze
+   <database>    database dns
    <regex>       regex to match
 
 """
